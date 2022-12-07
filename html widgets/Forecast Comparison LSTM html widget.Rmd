@@ -27,7 +27,7 @@ meanConsump <- cbind(predictedValues, testSetValues) %>% na.omit()
 meanConsump$residuals <- meanConsump$testSetValues - meanConsump$predictedValues
 ```
 
-```{r, echo = FALSE, fig.width=10, fig.height=6}
+```{r, echo = FALSE, fig.width=5, fig.height=3}
 dygraph(meanConsump, main = "Forecast comparison - LSTM ") %>%
   dyAxis("y", label = "Mean Power Consumption (kWh)") %>%
   dySeries("testSetValues", color = "blue", label = "Actual Values") %>%
