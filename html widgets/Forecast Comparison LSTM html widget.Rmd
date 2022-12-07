@@ -8,22 +8,20 @@ output: html_document
 ```{r, echo=FALSE, results='hide',message=FALSE}
 library(dygraphs)
 library(xts)
-setwd("C:/Users/Katalin Bayer/OneDrive/Documents/University/2022-2023/Deep Learning/Tutorial Project/dl_tutorial_timeseries-main")
 getwd()
 
 Dates <- read.csv("./Dates.csv")
 predictions <- read.csv("./predictions.csv")
 testSet <- read.csv("./testSet.csv")
 
-Dates$index <- NULL 
+Dates$X <- NULL 
 
 meanPowerConsumption <- cbind(predictions, testSet)
 meanPowerConsumption <- meanPowerConsumption[,c(2,4)]
-meanPowerConsumption <- meanPowerConsumption[(nrow(meanPowerConsumption)- 721+ 1):nrow(meanPowerConsumption),]
-Dates <- Dates[(nrow(Dates)-721+1):nrow(Dates),]
+#meanPowerConsumption <- meanPowerConsumption[(nrow(meanPowerConsumption)- 721+ 1):nrow(meanPowerConsumption),]
 
-predictedValues <- xts(x = meanPowerConsumption$`Predicted.values`, strptime(Dates, format = '%Y-%m-%d %H:%M:%S'))
-testSetValues <- xts(meanPowerConsumption$`Test.Set.values`, strptime(Dates, format = '%Y-%m-%d %H:%M:%S'))
+predictedValues <- xts(x = meanPowerConsumption$`Predicted.values`, strptime(Dates$DT, format = '%Y-%m-%d %H:%M:%S'))
+testSetValues <- xts(meanPowerConsumption$`Test.Set.values`, strptime(Dates$DT, format = '%Y-%m-%d %H:%M:%S'))
 
 meanConsump <- cbind(predictedValues, testSetValues) %>% na.omit()
 meanConsump$residuals <- meanConsump$testSetValues - meanConsump$predictedValues
@@ -32,10 +30,10 @@ meanConsump$residuals <- meanConsump$testSetValues - meanConsump$predictedValues
 ```{r, echo = FALSE, fig.width=10, fig.height=6}
 dygraph(meanConsump, main = "Forecast comparison - LSTM ") %>%
   dyAxis("y", label = "Mean Power Consumption (kWh)") %>%
-  dySeries("testSetValues", color = "red", label = "Actual Values") %>%
-  dySeries("predictedValues", color = "blue", label = "Predicted Value") %>%
+  dySeries("testSetValues", color = "blue", label = "Actual Values") %>%
+  dySeries("predictedValues", color = "red", label = "Predicted Value") %>%
   dySeries("residuals", color = "green", label = "Residuals") %>%
-  dyRangeSelector(dateWindow = c("2017-12-17", "2017-12-31")) %>%
+  dyRangeSelector(dateWindow = c("2017-12-17", "2017-12-29")) %>%
   dyUnzoom()%>% 
   dyCrosshair(direction = "vertical") 
 ```
