@@ -11,6 +11,8 @@ matplotlib = "*"
 sklearn = "*"
 scikit-learn = "*"
 statsmodels = "*"
+keras = "*"
+tensorflow = "*"
 
 [dev-packages]
 
