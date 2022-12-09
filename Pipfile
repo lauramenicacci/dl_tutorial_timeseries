@@ -13,6 +13,7 @@ scikit-learn = "*"
 statsmodels = "*"
 keras = "*"
 tensorflow = "*"
+pytorch-forecasting = "*"
 
 [dev-packages]
 
